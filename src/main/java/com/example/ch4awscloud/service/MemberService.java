@@ -24,4 +24,16 @@ public class MemberService {
         log.info("[API - LOG] 팀원 저장 완료 - id: {}", savedMember.getId());
         return MemberResponseDto.from(savedMember);
     }
+
+    @Transactional(readOnly = true)
+    public MemberResponseDto getMember(Long id) {
+        log.info("[API - LOG] 팀원 조회 요청 시작");
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("[API - LOG] 팀원 조회 실패 - 존재하지 않는 id: {}", id);
+                    return new IllegalArgumentException("해당 팀원이 존재하지 않습니다.");
+                });
+        log.info("[API - LOG] 팀원 조회 완료 - id: {}", id);
+        return MemberResponseDto.from(member);
+    }
 }
