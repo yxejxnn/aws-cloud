@@ -1,5 +1,6 @@
 package com.example.ch4awscloud.service;
 
+import com.example.ch4awscloud.common.exception.MemberNotFoundException;
 import com.example.ch4awscloud.dto.MemberRequestDto;
 import com.example.ch4awscloud.dto.MemberResponseDto;
 import com.example.ch4awscloud.entity.Member;
@@ -31,7 +32,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("[API - LOG] 팀원 조회 실패 - 존재하지 않는 id: {}", id);
-                    return new IllegalArgumentException("해당 팀원이 존재하지 않습니다.");
+                    return new MemberNotFoundException();
                 });
         log.info("[API - LOG] 팀원 조회 완료 - id: {}", id);
         return MemberResponseDto.from(member);
